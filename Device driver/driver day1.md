@@ -145,7 +145,7 @@ endif
 参数3:字符数组大小  
 参数4:权限  
 
-`module_param_array(name, type, nump, perm)`
+`module_param_array(name, type, nump, perm)`  
 参数1:insmod时参数名称，但也是某个数组名  
 参数2:类型  
 参数3:接收真正传递数据个数的变量地址。  
