@@ -7,12 +7,12 @@
 可以在内核中随时添加或者删除的一段代码。模块可以提高效率。  
 模块与应用程序比较：  
 
- | 模块 | 应用程序
-----|------|----
-执行空间 | 内核空间  | 用户空间
-入口函数|加载函数|main
-调用接口 | 内核函数  | 库函数或系统调用
-空间释放 | 手动释放  | 自动释放
+| | 模块 | 应用程序|
+|----|------|----|
+|执行空间 | 内核空间  | 用户空间|
+|入口函数|加载函数|main|
+|调用接口 | 内核函数  | 库函数或系统调用|
+|空间释放 | 手动释放  | 自动释放|
 
 只有使用模块时才会占用内存空间，不使用时可以从内存空间释放出来。
 
@@ -36,8 +36,8 @@
 2. 自定义加载函数`module_init(模块入口)`
 在Linux3.14 内核中显示为：
 
-```
-297 #define module_init(initfn)                 \                                                                             
+```c
+297 #define module_init(initfn)                 \                                                                             
 298     static inline initcall_t __inittest(void)       \
 299     { return initfn; }                  \
 300     int init_module(void) __attribute__((alias(#initfn))); initfn是init_module的别名
@@ -111,19 +111,19 @@ Ubuntu的/lib/modules/$(shell uname -r)/build索引了Ubuntu的内核的顶层�
 
 ```
 3. 因为我们执行了make -C $(KERNEL_DIR) M=$(PWD) modules,所以我们需要在顶层目录Makefile中寻找modules目标
-```
+```c
 1206 modules: $(module-dirs)
 1207     @$(kecho) '  Building modules, stage 2.';
 1208     $(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost  后续需要执行Makefile.modpost
 ```
 4. 进入Makefile.modpost文件
-```
+```c
 53 include $(if $(wildcard $(KBUILD_EXTMOD)/Kbuild), \
 54              $(KBUILD_EXTMOD)/Kbuild, $(KBUILD_EXTMOD)/Makefile) 在编译模块过程的某个时刻会引用用户自己的Makefile中
  回来的目的就是为了获取.o文件的。
 ```
 5. 如何实现这两个分支：在内核Makefile中有一个KERNELRELEASE变量：
-```
+```c
 384 KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
 有以上几个过程我们分析出自己的Makefile文件必须要有个判断语句:
 ifeq ($(KERNELRELEASE),)
