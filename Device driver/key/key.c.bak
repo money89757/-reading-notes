@@ -6,8 +6,6 @@
 #include<asm/uaccess.h>
 #include<linux/interrupt.h>
 #include<linux/sched.h>
-#include<linux/timer.h>
-#include<linux/workqueue.h>
 
 #define KEY_MAJOR 500
 #define KEY_MINOR 0
@@ -26,12 +24,6 @@ struct resource *res_key1;
 struct resource *res_key2;
 
 int key;
-int global_irqnum;
-
-struct timer_list mytimer;
-
-struct tasklet_struct mytasklet;
-struct work_struct mywork;
 
 MODULE_LICENSE("GPL");
 
@@ -63,11 +55,8 @@ int key_close(struct inode *inode,struct file *filp)
 }
 
 #if 1
-irqreturn_t key_handler(int irqnum,void *dev)//中断上半部
+irqreturn_t key_handler(int irqnum,void *dev)
 {
-	global_irqnum = irqnum;
-	mod_timer(&mytimer,jiffies + 4 * HZ / 100);
-#if 0
 	if(irqnum == res_key1->start)
 		key = 1;
 
@@ -76,37 +65,10 @@ irqreturn_t key_handler(int irqnum,void *dev)//中断上半部
 	
 	flag = 1;
 	wake_up_interruptible(&keyq);
-#endif 
-
-	tasklet_schedule(&mytasklet);
-	schedule_work(&mywork);
+	
 	return IRQ_HANDLED;
 }
 #endif
-
-void key_tasklet_handler(unsigned long data)//中断下半部的执行位置
-{
-	printk("my tasklet handler done\n");
-}
-
-void key_work_handler(struct work_struct *work)//中断下半部执行函数
-{
-	printk("my workqueue handler done\n");
-}
-
-void key_timer_handler(unsigned long data)
-{
-	if(global_irqnum == res_key1->start)
-		key = 1;
-
-	if(global_irqnum == res_key2->start)
-		key = 2;
-	
-	flag = 1;
-	wake_up_interruptible(&keyq);
-
-}
-
 struct file_operations key_ops = {
 	.open = key_open,
 	.read = key_read,
@@ -136,22 +98,12 @@ int key_probe(struct platform_device *key_dev)
 	ret = request_irq(res_key1->start,key_handler,IRQF_DISABLED | IRQF_TRIGGER_FALLING,"keyno1",NULL);
 	ret = request_irq(res_key2->start,key_handler,IRQF_DISABLED | IRQF_TRIGGER_FALLING,"keyno2",NULL);
 
-	init_timer(&mytimer);
-	mytimer.function = key_timer_handler;
-	add_timer(&mytimer);
-
-
-	tasklet_init(&mytasklet,key_tasklet_handler,0);//初始化tasklet
-
-	INIT_WORK(&mywork,key_work_handler);
-
 	printk("key_probe success\n");
 	return 0;
 }
 
 int key_remove(struct platform_device *key_dev)
 {
-	del_timer(&mytimer);
 	device_destroy(key_cls,devno);
 	class_destroy(key_cls);
 	cdev_del(&key_cdev);
