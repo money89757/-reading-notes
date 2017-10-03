@@ -1,4 +1,6 @@
 # Reading notes
 自己学习的心得笔记  
 
-有些地方从博客摘抄的，但地址忘了....  
+* Linux驱动
+* Android底层
+* C++
