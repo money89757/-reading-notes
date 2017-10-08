@@ -14,13 +14,10 @@ dblink_t *creat_dblink()
 	dblink_t *tail;
 
 	head = malloc(sizeof(dblink_t));
-	tail = malloc(sizeof(dblink_t));
 	
-	head->next = tail;
-	head->front = NULL;
+	head->next = head;
+	head->front = head;
 
-	tail->next = NULL;
-	tail->front = head;
 
 	return head;
 }
@@ -45,8 +42,8 @@ int ins_head_dblink(dblink_t *head,const data_t *data)
 int del_head_dblink(dblink_t *head)
 {
 	dblink_t *temp;
-
-	if(NULL == head->next->next)
+	
+	if(head == head->next)
 		return -1;
 
 	temp = head->next;
@@ -60,15 +57,16 @@ int del_head_dblink(dblink_t *head)
 
 void print_dblink(dblink_t *head)
 {
+	dblink_t *p = head;
 	dblink_t *tail;
-	while(NULL != head->next->next){
+	while(p != head->next){
 		head = head->next;
 		printf("%d ",head->data);
 	}
 	printf("\n");
 
 	tail = head->next;
-	while(NULL != tail->front->front){
+	while(p != tail->front){
 		tail = tail->front;
 		printf("%d ",tail->data);
 	}
