@@ -1,32 +1,32 @@
-# �ж� #
-## �жϷ��� ##
+# 中断 #
+## 中断分类 ##
 
-\| \|
-----|------
-�ڲ��ж� | �ⲿ�ж�  
-�����ж� | �������ж�
-�������ж� | ���������ж�
+|       |          | 
+| ------------- |:-------------:| 
+| 内部中断     |  外部中断 | 
+| 向量中断      |  非向量中断    |  
+| 可屏蔽中断 | 不可屏蔽中断  | 
 
-* �ص���ĵ����ⲿ�ж�
-����-> �жϿ����������νṹ������-> CPU
+* 重点关心的是外部中断
+外设-> 中断控制器（树形结构级联）-> CPU
 
-* HW interrupt ID Ӳ���жϺ�
+* HW interrupt ID 硬件中断号
 irq number  
-�ⲿ�жϣ� SPI��PPI��SGI
+外部中断： SPI、PPI、SGI
 
-#### ����ϵͳ�ں��Ƿ�ʵ�����жϻ���
-1. ��ʼ���жϿ�������Ӧ�Ĵ�����������Ӧ��һ�ѽṹ�壬irq_desc  irq_data  irq_chip irqaction  
-2. ����request_irq�ӿ��������ж�ע��
+#### 操作系统内核是否实现了中断机制
+1. 初始化中断控制器相应寄存器、产生相应的一堆结构体，irq_desc  irq_data  irq_chip irqaction  
+2. 调用request_irq接口来进行中断注册
 ```
-����1:Ӳ���жϺ�  
-����2:�жϴ�������  
-����3:IRQF_DISABLEDʹ�ÿ����жϣ��������������жϡ�  
-    IRQF_TRIGGER_FALLING �½��ش���  
-����4:����   ���жϺź����ư󶨣�������/proc/interrupts  
-����5:���ʹ�õ��ǿ��жϴ���NULL��ʹ��SPIʱ��Ҫ����
+参数1:硬件中断号  
+参数2:中断处理函数  
+参数3:IRQF_DISABLED使用快速中断，屏蔽其它所有中断。  
+    IRQF_TRIGGER_FALLING 下降沿触发  
+参数4:名称   将中断号和名称绑定，出现在/proc/interrupts  
+参数5:如果使用的是快中断传递NULL，使用SPI时需要传参
 ```
-3. ����������ж�ʱ�����л����жϴ���������ִ�С�
-���д��������������д�����������豸����  
+3. 当外设产生中断时，会切换到中断处理函数中执行。
+如果写按键驱动。先填写按键驱动的设备树。  
 
 ```c
 
@@ -37,12 +37,12 @@ mykey{
 };
 
 ```
-����ͨ�����Ǿ��л�е���Եİ�����  
-������������:  
-������ʽ:ʹ�ö�ʱ����  
-Ӳ����ʽ:����һ�����ݡ�  
+按键通常都是具有机械弹性的按键。  
+按键消抖方法:  
+软件方式:使用定时器。  
+硬件方式:并联一个电容。  
 
-### ������ʽ��������ʱ�� ###
+### 软件方式：操作定时器 ###
 
 ```c
 struct timer_list
@@ -53,38 +53,38 @@ struct timer_list
 
 ```
 
-1. ��ʼ����ʱ�� init_timer(struct timer_list * );
-2. ���Ӷ�ʱ�����ں� add_timer();  
-3. ���ö�ʱ������ʱʱ�� mod_timer();
+1. 初始化定时器 init_timer(struct timer_list * );
+2. 添加定时器到内核 add_timer();  
+3. 设置定时器的延时时间 mod_timer();
 
 ```c
-HZ��һ����λ   1HZ = 1��
+HZ是一个单位   1HZ = 1秒
 HZ / 100 = 10ms  
-jiffies + 3 * 10ms ���ö�ʱʱ��Ϊ��ʱ30����
+jiffies + 3 * 10ms 设置定时时间为延时30毫秒
 
 ```
-## �ж��ϡ��°벿
-ִ���ж�ʱ��֤ʱ������̣�����ԸΥ�ܶ�ʱ�����ǲ����жϴ�������ʱ�������Ӻܶ๦�ܴ�������ж�ִ��ʱ�������  
-����Ҫ�����ж�ʱ���������������ʹ���ϰ벿���°벿��
-1. ʲô���ж��ϰ벿���°벿
-���жϵĹ��ֳܷ������������ֱ�ִ�С�  
-�ϰ벿:��������֮ǰʹ�ù����жϴ�������  
-�°벿:ִ��һЩ�ǽ�������  
+## 中断上、下半部
+执行中断时保证时间进来短，事与愿违很多时候我们操作中断处理函数时都会添加很多功能代码造成中断执行时间过长。  
+所以要避免中断时间过长。方法就是使用上半部和下半部。
+1. 什么是中断上半部、下半部
+将中断的功能分成两个函数来分别执行。  
+上半部:就是我们之前使用过的中断处理函数  
+下半部:执行一些非紧急任务  
 
-2. ʲô�ǽ�������?  
-�ܽ�:1)���һ�������ʱ��ǳ����з����ϰ벿����  
-	 2)��Ӳ���Ĳ��������ϰ벿  
-	 3)���Ҫ��ִ��ʱ���ܱ������жϴ�Ϸ����ϰ벿  
+2. 什么是紧急任务?  
+总结:1)如果一个任务对时间非常敏感放在上半部运行  
+	 2)对硬件的操作放在上半部  
+	 3)如果要求执行时不能被其他中断打断放在上半部  
 
-3. ʲô���°벿��  
-linux�ں�ʵ�ֺܶ�ܶ���°벿���ƣ����Ǵ�2.6�ں�֮����Ҫ�ľ����֡������жϡ�tasklet����������  
-�������ִ��ֻ��Ҫ�˽����жϣ�ѧ��ʹ��tasklet���������С�  
+3. 什么是下半部？  
+linux内核实现很多很多的下半部机制，但是从2.6内核之后主要的就三种——软中断、tasklet、工作队列  
+上面三种大家只需要了解软中断，学会使用tasklet、工作队列。  
 
-4. �°벿ʲôʱ��ִ�У�  
-ͨ����������ж��ϰ벿ִ����ɺ����°벿���ơ�  
+4. 下半部什么时候执行？  
+通常情况下在中断上半部执行完成后唤醒下半部机制。  
 
 
-#### ���ж� #####
+#### 软中断 #####
 
 ```c
 include/linux/interrupt.h
@@ -109,83 +109,83 @@ include/linux/interrupt.h
 359 	LXS_SOFTIRQ,
 360     NR_SOFTIRQS
 361 };
-�����ں�ռ�õ����ж�����жϺ�(Ҳ�������ж�����)
+以上内核占用的软中断相关中断号(也叫做软中断类型)
 
 ```
 
-�����������ʹ�����ж���ʵ���°벿��  
-ʹ�÷�����  
+如何在驱动中使用软中断来实现下半部：  
+使用方法：  
 ```c
-1��void open_softirq(int nr, void (*action)(struct softirq_action *));ע�����ж�
-2��void raise_softirq(unsigned int nr);�������ж�
-��������������ں˲�û�������ű���Ҫ��ʹ�ñ��룬����kernel/softirq.c�ļ�
-��open_softirq������raise_softirq�����������������EXPORT_SYMBOL(������);
-���±����ں�:make uImage
+1、void open_softirq(int nr, void (*action)(struct softirq_action *));注册软中断
+2、void raise_softirq(unsigned int nr);唤醒软中断
+上面的两个函数内核并没导出符号表，要想使用必须，进入kernel/softirq.c文件
+在open_softirq函数和raise_softirq函数定义的下面添加EXPORT_SYMBOL(函数名);
+重新编译内核:make uImage
 
-tasklet(С���񣬻������ж�ʵ�ֵ�)ʹ�÷���:
+tasklet(小任务，基于软中断实现的)使用方法:
 425 struct tasklet_struct                                                       
 426 {
 427     struct tasklet_struct *next;
 428     unsigned long state;
 429     atomic_t count;
-430     void (*func)(unsigned long);//tasklet�°벿����������func�����ڲ���ɵ�
+430     void (*func)(unsigned long);//tasklet下半部操作就是在func函数内部完成的
 431     unsigned long data;
 432 };
 
-tasklet_init();��ʼ��tasklet
-tasklet_schedule();����tasklet
+tasklet_init();初始化tasklet
+tasklet_schedule();调度tasklet
 
 
 ```
 
-#### ��������ʹ�÷��� ####
+#### 工作队列使用方法 ####
 ```c
 
 100 struct work_struct {
 101     atomic_long_t data;
 102     struct list_head entry;
-103     work_func_t func; //���������е��°벿��������
+103     work_func_t func; //工作队列中的下半部操作函数
 }
 19 typedef void (* work_func_t)(struct work_struct* work);
 
-��ʼ����������:INIT_WORK();
-���ȹ�������:schedule_work();
+初始化工作队列:INIT_WORK();
+调度工作队列:schedule_work();
 
-tasklet�͹������е�����:
-tasklet�����ж������ġ������������ڽ��������ġ�
-tasklet�������ж��°벿��������ʱ�ģ��������п�����˯����ʱ����һ��Ľӿڣ��������һ���������ϵͳ������ȡ�
+tasklet和工作队列的区别:
+tasklet用于中断上下文、工作队列用于进程上下文。
+tasklet操作的中断下半部不能有延时的；工作队列可以有睡眠延时阻塞一类的接口，还像进程一样参与操作系统任务调度。
 
 ```
 
-### ADC������д ###
+### ADC驱动编写 ###
 ```
-adcӲ��ԭ��:ģ������ת����
+adc硬件原理:模拟数字转换器
 
-ʹ��ADCʱ��Ҫ����:����ת�����ȡ�����ʱ��Ƶ�ʡ�ѡ��ͨ��
+使用ADC时需要经历:设置转换精度、设置时钟频率、选择通道
 						    ADCCON             ADCMUX      
 
-ADCDAT ��ȡת����ĵ�ѹֵ
+ADCDAT 获取转换后的电压值
 		    1.8
-	������������������������������������  * ADCDAT  ��ȡ��ʵ�ʵĵ�ѹֵ��ֵ��uvΪ��λ
+	——————————————————  * ADCDAT  获取的实际的电压值、值以uv为单位
 		4096 * 1000
 
-ADC���ݵĻ�ȡ��ʽ:��ѯ���ж�
+ADC数据的获取方式:轮询、中断
 
-��������ʹ���жϵķ�ʽ��ȡ���ݡ�д����ǰ��ʵ��adc�������豸����
+我们现在使用中断的方式获取数据。写驱动前，实现adc驱动的设备树。
 
-������оƬ�ֲ�ھ��·����ⲿ�ж����ӵ�GIC���ڲ����ӵ�combiner��������
-�������ֲ��ʮ���ҵ� INTG10  [3]   ��������ADC
+在三星芯片手册第九章发现外部中断连接到GIC、内部连接到combiner控制器上
+到三星手册第十章找到 INTG10  [3]   操作的是ADC
 
 vi Documentation/devicetree/bindings/arm/samsung/interrupt-combiner.txt
 23 - #interrupt-cells: should be <2>. The meaning of the cells are
- 24     * First Cell: Combiner Group Number.   ��ı��
- 25     * Second Cell: Interrupt number within the group.   �������ӱ��  
+ 24     * First Cell: Combiner Group Number.   组的编号
+ 25     * Second Cell: Interrupt number within the group.   在组中子编号  
 
-#interrupt-cells �����˵�ǰ�ڵ���ӽڵ��interrupts������2��ֵ��
+#interrupt-cells 代表了当前节点的子节点的interrupts属性有2个值。
 
 
-combiner�ڵ�λ��:arch/arm/boot/dts/exynos4.dtsi
-�����Լ���adc�豸��:
+combiner节点位置:arch/arm/boot/dts/exynos4.dtsi
+我们自己的adc设备树:
 fs4412-adc{
 	compatible = "fs4412,adc";
 
@@ -194,40 +194,40 @@ fs4412-adc{
 	interrupts = <10 3>;
 };
 
-data = readl(�Ĵ�����ַ); �ӼĴ����ж�ȡ����
-writel(���ݣ��Ĵ�����ַ); ������д�뵽�Ĵ�����
+data = readl(寄存器地址); 从寄存器中读取数据
+writel(数据，寄存器地址); 将数据写入到寄存器中
 
 ```
 
-### I2C ����Э�� ###
+### I2C 总线协议 ###
 ```c
-I2C����Э��:
-I2C�����Ƿ����ֹ�˾�������������ߵ��豸��
+I2C总线协议:
+I2C总线是飞利浦公司生产具有两根线的设备。
 
-I2C���ߡ��������ߺ�ʱ����
+I2C总线——数据线和时钟线
 
-I2C����ͨ��ʱ:��ʼ�źš������źš�Ӧ���ź�
-��ʼ�ź�:��ʱ����Ϊ�ߵ�ƽ���������ɸߵ�������ʱ��������ʼ�ź�
-�����ź�:��ʱ����Ϊ�ߵ�ƽ���������ɵ͵��ߵ�ƽ������������ź�
+I2C总线通信时:起始信号、结束信号、应答信号
+起始信号:当时钟线为高电平，数据线由高到低跳变时产生了起始信号
+结束信号:当时钟线为高电平，数据线由低到高电平跳变产生结束信号
 
-ÿ�δ�������һ����8λ���ڵھ�λһ����һ��Ӧ��λ��
-Ӧ���ź�:ʱ���߱�֤�ߵ�ƽ�����ڼ������߱����͡�
-		 �ڵھŸ�ʱ����������������յ�0˵���ӻ��������������ݡ�
+每次传输数据一定是8位，在第九位一定是一个应答位。
+应答信号:时钟线保证高电平，这期间数据线被拉低。
+		 在第九个时钟周期如果主机接收到0说明从机正常接收了数据。
 
 
-I2C���ݵĴ����ʽ:
-1������һֱ���ӻ���������
-	����֡�ĸ�ʽ:��ʼ�źš���8λ���ݡ���Ӧ��(�ӻ�������)����8λ����(���ǵ�ַ�Ͷ�дλ)�����ӻ�������Ӧ�𡪡������ź�
+I2C数据的传输格式:
+1、主机一直给从机发送数据
+	数据帧的格式:起始信号——8位数据——应答(从机给主机)——8位数据(不是地址和读写位)——从机给主机应答——结束信号
 							 ||
-						ǰ��7λ�Ǵӻ���ַ
-						�ڰ�λ�����ݷ���
-	����8λ������:11010000 ǰ���7λ�����ӻ���ַ�������0�����������ӻ���������
-                  11010001 ǰ���7λ�����ӻ���ַ�������1�����������մӻ����� 	
-2������һֱ���մӻ�����
-    ����֡�ĸ�ʽ:��ʼ�źš���8λ����(��7λ��ַ+1λ��1)�����ӻ�������Ӧ�𡪡��������յ�8λ���ݡ����������ӻ�Ӧ�𡪡������ź�
+						前面7位是从机地址
+						第八位是数据方向
+	假设8位数据是:11010000 前面的7位代表从机地址，后面的0代表主机给从机发送数据
+                  11010001 前面的7位代表从机地址，后面的1代表主机接收从机数据 	
+2、主机一直接收从机数据
+    数据帧的格式:起始信号——8位数据(高7位地址+1位的1)——从机给主机应答——主机接收的8位数据——主机给从机应答——结束信号
 
-3�������������ݺ�������մӻ�����
-    ����֡�ĸ�ʽ:��ʼ�źš���8λ����(7λ�ӻ���ַ+1λ��0)�����ӻ�������Ӧ�𡪡�����8λ���ݡ����ӻ�������Ӧ�𡪡�����7λ�ӻ���ַ+1λ��1�����ӻ�������Ӧ�𡪡��������յ�8λ���ݡ����������ӻ�Ӧ�𡪡������ź�   
+3、主机发送数据后继续接收从机数据
+    数据帧的格式:起始信号——8位数据(7位从机地址+1位的0)——从机给主机应答——发送8位数据——从机给主机应答——发送7位从机地址+1位的1——从机给主机应答——主机接收的8位数据——主机给从机应答——结束信号   
 
 
 
