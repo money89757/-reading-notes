@@ -199,6 +199,79 @@ writel(数据，寄存器地址); 将数据写入到寄存器中
 
 ```
 
+## ADC驱动伪代码 ##
+
+```c
+模块声明
+
+打开
+
+关闭 
+
+读
+{
+	writel(readl(adc_base) | 1,adc_base);
+	阻塞(等待队列实现)
+	读取数据寄存器内容
+	
+	copy_to_user();
+}
+
+
+写
+
+ioctl
+
+中断处理函数()
+{
+	flag = 1;
+	writel(0,adc_base + ADCCLRINT);//清除中断
+	wake_up();
+}
+
+int myprobe()
+{
+	//添加字符设备框架
+	
+	// platform_get_resource(,IORESOURCE_MEM,);获取寄存器首地址
+	// ioremap();
+	// writel(1 << 16 | 1 << 14 | 0xff << 6,地址);//设置转换精度、使能预分频、设置预分频值
+	// writel(3,adc_base + ADCMUX);
+	
+	platform_get_resource(,IORESOURCE_IRQ,);
+	request_irq(,中断处理函数,);
+	
+	init_waitqueue_head();
+}
+
+struct of_device_id myof_table[] = {
+	{
+		.compatible = "fs4412,adc", 
+	},
+}
+
+struct platform_driver drv
+{
+	.driver = {
+		.name = "",
+		.of_match_table = myof_table,
+	};
+	.probe = 
+	.remove = 
+}
+模块加载函数
+{
+	platform_register_driver(&drv);
+}
+
+模块卸载函数
+{
+	platform_unregister_driver();
+}
+
+
+```
+
 ### I2C 总线协议 ###
 ```c
 I2C总线协议:
@@ -228,7 +301,5 @@ I2C数据的传输格式:
 
 3、主机发送数据后继续接收从机数据
     数据帧的格式:起始信号——8位数据(7位从机地址+1位的0)——从机给主机应答——发送8位数据——从机给主机应答——发送7位从机地址+1位的1——从机给主机应答——主机接收的8位数据——主机给从机应答——结束信号   
-
-
 
 ```
