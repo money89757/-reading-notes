@@ -23,5 +23,5 @@
 4. 模拟链表
 ---
 ## 代码无关
-1.ctags  
-2.makefile  
+1. ctags  
+2. makefile  
