@@ -25,3 +25,5 @@
 ## 代码无关
 1. ctags  
 2. makefile  
+3. 内存对齐
+4. attribute属性
