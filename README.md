@@ -23,7 +23,7 @@
 4. 模拟链表
 ---
 ## 代码无关
-1. [ctags](https://github.com/money89757/Linux-Book/blob/master/ctags.md)  
-2. [makefile](https://github.com/money89757/Linux-Book/blob/master/makefile.md)  
+1. ctags
+2. makefile
 3. [内存对齐](https://github.com/money89757/Linux-Book/blob/master/%E4%BB%A3%E7%A0%81%E6%97%A0%E5%85%B3/%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90.md)
 4. attribute属性
