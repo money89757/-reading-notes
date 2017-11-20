@@ -30,3 +30,5 @@
 2. makefile
 3. [内存对齐](https://github.com/money89757/Linux-Book/blob/master/%E4%BB%A3%E7%A0%81%E6%97%A0%E5%85%B3/%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90.md)
 4. attribute属性
+5. [每个程序员绝对需要了解编码和字符集与文本一起工作](http://kunststube.net/encoding/)
+6. [写一个unix内核](https://indradhanush.github.io/blog/writing-a-unix-shell-part-1/)
