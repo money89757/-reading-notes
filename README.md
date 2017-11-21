@@ -32,3 +32,4 @@
 4. attribute属性
 5. [每个程序员绝对需要了解编码和字符集与文本一起工作](http://kunststube.net/encoding/)
 6. [写一个unix内核](https://indradhanush.github.io/blog/writing-a-unix-shell-part-1/)
+7. [EXcel导入文本数据](http://blog.163.com/sunlongfei0218@126/blog/static/976953332011740723915/)
