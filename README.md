@@ -33,3 +33,4 @@
 6. [写一个unix内核](https://indradhanush.github.io/blog/writing-a-unix-shell-part-1/)
 7. [EXcel导入文本数据](http://blog.163.com/sunlongfei0218@126/blog/static/976953332011740723915/)
 8. [C内存分析](http://marek.vavrusa.com/c/memory/2015/02/20/memory)
+9. [C语言结构体](http://blog.jobbole.com/57822/)
