@@ -35,3 +35,4 @@
 8. [C内存分析](http://marek.vavrusa.com/c/memory/2015/02/20/memory)
 9. [C语言结构体](http://blog.jobbole.com/57822/)
 10. [数据结构和算法C语言描述](http://www.luocong.com/dsaanotes/index-Z-H-1.htm#node_toc_start)
+11. [C/C++框架](http://www.jianshu.com/p/37dcc830abc2)
