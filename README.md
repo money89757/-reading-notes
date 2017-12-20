@@ -37,3 +37,4 @@
 10. [数据结构和算法C语言描述](http://www.luocong.com/dsaanotes/index-Z-H-1.htm#node_toc_start)
 11. [C/C++框架](http://www.jianshu.com/p/37dcc830abc2)
 12. [C/C++目标](http://blog.csdn.net/langeldep/article/details/6293655)
+13. [volatile对指令重排的影响](https://mp.weixin.qq.com/s?__biz=MzI1MTIzMzI2MA==&mid=2650562071&idx=1&sn=f38957e70329e14a994ee53c96751331&chksm=f1fee894c68961827a883c365a1d3646ff8b3b7267dc97cacd93ca265375d52e2a08c4d6806a&scene=0#rd)
