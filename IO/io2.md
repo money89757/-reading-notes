@@ -50,11 +50,13 @@ a+:读写权限。文件不存在创建。
 		    先写后读，从末尾写数据，从末尾读数据
 ```
 ---
+
 ```
 int fgetc(FILE *)
 从文件中读取一个字符，成功返回字符的ascii值，失败或者到达尾部返回EOF
 ```
-```C
+
+```
 
 feof(FILE *) 返回值为非0到达尾部，返回值为0没有到达尾部
 
@@ -67,6 +69,8 @@ while(1)
 	if(ch == EOF && feof(fp) != 0)
 		到达尾部
 }
+
+```
 
 ```
 char *fgets(char *,int size,FILE *)
@@ -82,6 +86,7 @@ nmemb代表最多读取的对象个数
 
 
 返回值:等于nmemb读取成功，小于nmemb说明可能到达了文件尾部也可能中途出错
+
 ```
 
 ```
@@ -105,9 +110,7 @@ fopen("1.txt","a");<==> open("1.txt",O_WRONLY | O_CREAT | O_APPEND,0664);
 fopen("1.txt","a+");<==> open("1.txt",O_RDWR | O_CREAT | O_APPEND,0664);
 
 stdin <==> 0  stdout <==> 1  stderr <==> 2
-
 ```
----
 
 ```
 ssize_t read(int fd,void *buf,size_t size);
@@ -116,12 +119,15 @@ ssize_t read(int fd,void *buf,size_t size);
 参数2:存放了读取到的数据
 参数3:存放数据的空间大小
 返回值:成功返回读取到的字节个数，0代表到达文件尾部，-1出错
+
 ```
 
 ```
+
 ssize_t write(int fd,const void *buf,size_t size);
 功能:将buf指向的空间中的数据写入到文件中
 参数3:代表了实际写入的数据字节数
+
 ```
 
 ```
@@ -146,6 +152,7 @@ off_t lseek(int fd,off_t offset,int whence);
 动态库:以lib开头，以.so结尾  
 
 ```
+
 例子:libabc.a 这个整体叫做静态库，而其中的abc叫做静态库名称
 	 lib123.so 整体叫做动态库，其中123叫做动态库名称
 ```
