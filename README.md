@@ -41,3 +41,4 @@
 12. [C/C++目标](http://blog.csdn.net/langeldep/article/details/6293655)
 13. [volatile对指令重排的影响](https://mp.weixin.qq.com/s?__biz=MzI1MTIzMzI2MA==&mid=2650562071&idx=1&sn=f38957e70329e14a994ee53c96751331&chksm=f1fee894c68961827a883c365a1d3646ff8b3b7267dc97cacd93ca265375d52e2a08c4d6806a&scene=0#rd)
 14. [技术焦虑的加法与减法](https://mp.weixin.qq.com/s?__biz=MjM5MjAwODM4MA==&mid=2650692192&idx=1&sn=f81535eb3e30730d6a9aff6d230f8036&chksm=bea62bb389d1a2a5e488341ed4213fae0f1046b0eabd6c47d0bf2494a96efbfff0f2aa50d9e4&scene=0#rd)
+15. [char *a, char **a](http://blog.163.com/digoal@126/blog/static/163877040201271195312138/)
