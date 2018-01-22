@@ -43,3 +43,4 @@
 14. [技术焦虑的加法与减法](https://mp.weixin.qq.com/s?__biz=MjM5MjAwODM4MA==&mid=2650692192&idx=1&sn=f81535eb3e30730d6a9aff6d230f8036&chksm=bea62bb389d1a2a5e488341ed4213fae0f1046b0eabd6c47d0bf2494a96efbfff0f2aa50d9e4&scene=0#rd)
 15. [char * a, char **a](http://blog.163.com/digoal@126/blog/static/163877040201271195312138/)
 16. [扫描枪读条码数据在单片机串口电路的读取与显示](http://blog.csdn.net/guomutian911/article/details/23925585)
+17. [python openCV条码识别](https://mp.weixin.qq.com/s/epPB4gHd5X4K3abrzJAGEw)
