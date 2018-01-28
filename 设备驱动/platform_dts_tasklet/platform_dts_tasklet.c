@@ -62,14 +62,14 @@ static struct platform_driver pdrv = {
 static int fs4412_driver_init(void){
 	//注册platform_driver到内核中
 	platform_driver_register(&pdrv);
-	printk("Hello World ):\n");
+	printk("driver_init\n");
 	return 0;
 }
 
 static void fs4412_driver_exit(void){
 
 	platform_driver_unregister(&pdrv);
-	printk("Good Bye,linux kernel >_<\n");
+	printk("dirver_exit\n");
 }
 
 //1. 入口修饰
