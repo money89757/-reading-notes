@@ -1,15 +1,15 @@
-//Í·ÎÄ¼þ
+//å¤´æ–‡ä»¶
 #include <linux/module.h>
 #include <linux/init.h>
 #include <linux/of.h>
 #include <linux/platform_device.h>
 #include <linux/interrupt.h>
-//¶¨Òåtasklet_struct
+//å®šä¹‰tasklet_struct
 static struct tasklet_struct my_tasklet;
 
 static const struct of_device_id fs4412_dts_table[] = {
-	{.compatible = "jn16071,k2"},//ºÍÉè±¸Ê÷ÖÐÒ»ÖÂ£¬²ÅÄÜÆ¥ÅäÉè±¸Ê÷ÐÅÏ¢
-	{/*·ÀÖ¹Ô½½çµÄÉÚ±ø*/},
+	{.compatible = "jn16071,k2"},//å’Œè®¾å¤‡æ ‘ä¸­ä¸€è‡´ï¼Œæ‰èƒ½åŒ¹é…è®¾å¤‡æ ‘ä¿¡æ¯
+	{},
 };
 static irqreturn_t fs4412_handler(int irqno, void *dev){
 
@@ -24,11 +24,11 @@ static void fs4412_after_handler_tasklet(unsigned long args){
 
 
 static int fs4412_driver_probe(struct platform_device* pdev){
-	//¶¨Òå½ÓÊÜ×ÊÔ´µÄresource½á¹¹Ìå
+	//å®šä¹‰æŽ¥å—èµ„æºçš„resourceç»“æž„ä½“
 	struct resource* r1 = NULL;
 	r1 = platform_get_resource(pdev,IORESOURCE_IRQ,0);
 
-	//ÉêÇëÖÐ¶Ï
+	//ç”³è¯·ä¸­æ–­
 	if(request_irq(r1->start,fs4412_handler,IRQF_DISABLED | IRQF_TRIGGER_FALLING,"jn16071-interrupt",NULL)){
 		printk("request_irq failed\n");
 		free_irq(r1->start,NULL);
@@ -42,13 +42,13 @@ static int fs4412_driver_probe(struct platform_device* pdev){
 static int fs4412_driver_remove(struct platform_device* pdev){
 	struct resource* r1 = NULL;
 	r1 = platform_get_resource(pdev,IORESOURCE_IRQ,0);
-	//ÊÍ·ÅÕ¼ÓÃµÄÖÐ¶ÏºÅ
+	//é‡Šæ”¾å ç”¨çš„ä¸­æ–­å·
 	free_irq(r1->start,NULL);
 	printk("fs4412_driver_remove\n");
 	return 0;
 }
 
-//¶¨Òåplatform_driverÇý¶¯ÐÅÏ¢ÃèÊö½á¹¹Ìå
+//å®šä¹‰platform_driveré©±åŠ¨ä¿¡æ¯æè¿°ç»“æž„ä½“
 static struct platform_driver pdrv = {
 	.probe = fs4412_driver_probe,
 	.remove = fs4412_driver_remove,
@@ -60,24 +60,24 @@ static struct platform_driver pdrv = {
 };
 
 static int fs4412_driver_init(void){
-	//×¢²áplatform_driverµ½ÄÚºËÖÐ
+	//æ³¨å†Œplatform_driveråˆ°å†…æ ¸ä¸­
 	platform_driver_register(&pdrv);
-	printk("Hello World ):\n");
+	printk("driver_init\n");
 	return 0;
 }
 
 static void fs4412_driver_exit(void){
 
 	platform_driver_unregister(&pdrv);
-	printk("Good Bye,linux kernel >_<\n");
+	printk("dirver_exit\n");
 }
 
-//1. Èë¿ÚÐÞÊÎ
+//1. å…¥å£ä¿®é¥°
 module_init(fs4412_driver_init);
 
-//2. ³ö¿ÚÐÞÊÎ
+//2. å‡ºå£ä¿®é¥°
 
 module_exit(fs4412_driver_exit);
 
-//3. Ðí¿ÉÖ¤
+//3. è®¸å¯è¯
 MODULE_LICENSE("GPL");
