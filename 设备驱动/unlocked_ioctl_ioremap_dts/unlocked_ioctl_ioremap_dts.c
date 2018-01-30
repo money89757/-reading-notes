@@ -53,7 +53,9 @@ static int fs4412_driver_release(struct inode* inode, struct file* filp){
 }
 static long fs4412_driver_unlocked_ioctl(struct file* filp, unsigned int cmd, unsigned long args){
 
-	if(_IOC_TYPE(cmd) != MAGIC_TYPE)return -EINVAL;
+	if(_IOC_TYPE(cmd) != MAGIC_TYPE)
+
+		return -EINVAL;
 	
 	switch(_IOC_NR(cmd)){
 		case 0:{
@@ -90,6 +92,8 @@ static int fs4412_driver_probe(struct platform_device * pdev){
 	printk("match ok!\n");
 	return 0;
 }
+
+
 static int fs4412_driver_remove(struct platform_device * pdev){
 
 	//释放资源
@@ -103,6 +107,7 @@ static struct of_device_id fs4412_dts_table[] = {
 	{.compatible = "fs4412,led2"},
 	{},
 }; 
+
 static struct platform_driver pdrv = {
 	.probe = fs4412_driver_probe,
 	.remove = fs4412_driver_remove,
@@ -161,7 +166,7 @@ static void fs4412_driver_exit(void){
 	platform_driver_unregister(&pdrv);
 	cdev_del(&scull.cdev);
 	unregister_chrdev_region(devno,count);
-	printk("Good Bye,linux kernel >_<\n");
+	printk("fs4412_driver_exit\n");
 }
 
 //1. 入口修饰
