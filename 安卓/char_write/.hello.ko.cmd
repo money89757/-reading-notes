@@ -1,0 +1,1 @@
+cmd_/home/linux/char_write/hello.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/linux/char_write/hello.ko /home/linux/char_write/hello.o /home/linux/char_write/hello.mod.o
