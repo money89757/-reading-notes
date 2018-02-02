@@ -46,3 +46,4 @@
 17. [python openCV条码识别](https://mp.weixin.qq.com/s/epPB4gHd5X4K3abrzJAGEw)
 18. [堆排序和优先队列](https://mp.weixin.qq.com/s?__biz=MzI1MTIzMzI2MA==&mid=2650562293&idx=1&sn=97fefe1225b2aea281f3df065c04e447&chksm=f1fee876c6896160552a71f3fae9e5705655b86a99e66b63071533bef582122e151771df4d04&mpshare=1&scene=1&srcid=0128wSJpUiiIUCSlPPNw3qz6#rd)
 19. [来自Unix/Linux的编程启示录](http://blog.csdn.net/dd864140130/article/details/54922319)
+20. [一维码code128的解码与识别](http://blog.csdn.net/fengbingchun/article/details/54604786)
