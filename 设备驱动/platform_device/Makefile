@@ -4,7 +4,7 @@ obj-m := plat_device.o plat_buttons.o
 
 else
 	
-KDIR := /home/guoqian/4-3-1/linux-2.6.29
+KDIR := /home/4-3-1/linux-2.6.29
 all:
 	make -C $(KDIR) M=$(PWD) modules ARCH=arm CROSS_COMPILE=arm-linux-
 clean:

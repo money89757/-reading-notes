@@ -1,9 +1,3 @@
-/*
- *      Buttons Example for Matrix V
- *
- *      Copyright (C) 2004 capbily - friendly-arm
- *	capbily@hotmail.com
- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
