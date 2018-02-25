@@ -22,3 +22,4 @@
 21. [Excel打印](https://zhuanlan.zhihu.com/p/30011566)
 22. [linux timerfd系列函数总结](https://www.cnblogs.com/wenqiang/p/6698371.html)
 23. [meltdown](https://meltdownattack.com/meltdown.pdf)
+24. [Linux与网络时间同步](https://www.cnblogs.com/blogforly/p/5953878.html)
