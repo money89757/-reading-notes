@@ -24,3 +24,4 @@
 23. [meltdown](https://meltdownattack.com/meltdown.pdf)
 24. [Linux与网络时间同步](https://www.cnblogs.com/blogforly/p/5953878.html)
 25. [Markdown里面使用mermaid画流程图](http://blog.csdn.net/Subson/article/details/78054689)
+26. [C 结构体打包](https://qkldx.net/topic/1368/%E5%A4%B1%E4%BC%A0%E7%9A%84c%E7%BB%93%E6%9E%84%E4%BD%93%E6%89%93%E5%8C%85%E6%8A%80%E8%89%BA)
