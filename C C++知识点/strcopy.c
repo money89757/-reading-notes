@@ -4,7 +4,7 @@
 
 int main(int argc, char const *argv[])
 {
-	/* 交换前【排序 */
+	/* 交换前排序 */
 	char str[10][20] = {"apple","google","amd","intel","ailibaba","xiao","nike","addies","h","z","o"};
 	int i,j;
 	for(i = 0;i < 10; i++)
@@ -21,9 +21,9 @@ int main(int argc, char const *argv[])
 			{
 				char temp;
 				//	交互字符串不该用赋值法
-				strcpy(temp,str[i]);
+				strcpy(str[temp],str[i]);
 				strcpy(str[i],str[j]);
-				strcpy(str[j],temp);
+				strcpy(str[j],str[temp]);
 			}
 		}
 	}
