@@ -27,3 +27,4 @@
 26. [C 结构体打包](https://qkldx.net/topic/1368/%E5%A4%B1%E4%BC%A0%E7%9A%84c%E7%BB%93%E6%9E%84%E4%BD%93%E6%89%93%E5%8C%85%E6%8A%80%E8%89%BA)
 27. [在单片机中，C语言的一些误用和总结](http://blog.csdn.net/DP29syM41zyGndVF/article/details/79017455)
 28. [一致性哈希算法](http://www.zsythink.net/archives/1182)
+29. [C编译器不同造成的问题](https://xiafei-xupt.github.io/2018/03/20/diary-2018-0318-0320/?from=singlemessage&isappinstalled=0#more)
