@@ -4,6 +4,7 @@
 
 int *plusOne(int *digits, int digitsSize, int *returnSize)
 {
+#if 0
 	int i,j,len = 0,carry = 1;
 	
 	int *result = (int *)malloc((digitsSize + 1) * sizeof(int));
@@ -24,6 +25,35 @@ int *plusOne(int *digits, int digitsSize, int *returnSize)
 	
 	*returnSize = len;
 	return result;
+#endif
+	
+	int flag = 1;
+	int i;
+	int *res = NULL;
+	*returnSize = digitsSize;
+	for(i = digitsSize - 1; i >= 0; i--)
+	{
+		digits[i] = digits[i] + 1;
+		flag = 0;
+		if(digits[i] >= 10)
+		{
+			digits[i] = digits[i] - 10;
+			flag = 1;
+		}
+		else
+		break;
+	}
+	if(flag == 1)
+	{
+		res = malloc(sizeof(int) * (digitsSize + 1));
+		for(i = digitsSize; i >= 0; i--)
+		res[i+1] = digits[i];
+		res[0] = flag;
+		*returnSize = digitsSize + 1;
+		return res;
+	}
+	
+	return digits;
 }
 
 int main(int argc, char **argv) 
